@@ -7,16 +7,28 @@ const tweets = [];
 const users = [];
 
 server.post('/sign-up', (req, res) => {
-    users.push(req.body);
-    res.send("OK");
+    if (!req.body.avatar || !req.body.username) {
+        res.status(400).send('Todos os campos são obrigatórios!');
+    } else {
+        users.push(req.body);
+        res.status(201).send("OK");
+    }
 });
 
 server.post('/tweets', (req, res) => {
-    const avatar = users.find((value) => req.body.username === value.username).avatar;
-    const tweet = {
-        ...req.body,
-        avatar
-    };
+    if (!req.body.username || !req.body.tweet) {
+        res.status(400).send('Todos os campos são obrigatórios!');
+    } else {
+        const avatar = users.find((value) => req.body.username === value.username).avatar;
+        const tweet = {
+            ...req.body,
+            avatar
+        };
+
+        tweets.push(tweet);
+        res.status(201).send("OK");
+    }
+
 
     /* const tweet = {
         username: req.body.username,
@@ -24,9 +36,9 @@ server.post('/tweets', (req, res) => {
         avatar: avatar
     }; */
 
-    tweets.push(tweet);
+
     //tweets.unshift(tweet);
-    res.send("OK");
+
 });
 
 server.get('/tweets', (req, res) => {
@@ -43,4 +55,23 @@ server.get('/tweets', (req, res) => {
     res.send(tenTweets);
 });
 
-server.listen(5000, () => console.log('Listening on port 5000'));
+server.get('/tweets/:username', (req, res) => {
+    const username = req.params.username;
+    let flag = 0;
+    let userTweets = [];
+    for (let i = 0; i < tweets.length; i++) {
+        if (username === tweets[i].username) {
+            userTweets.push(tweets[i]);
+            flag = 1
+        }
+    }
+
+    if (flag === 0) {
+        res.status(400).send('Usuário não encontrado');
+    } else {
+        res.send(userTweets);
+    }
+});
+
+
+server.listen(5000, () => console.log('Listening on port 5000')); 
