@@ -3,23 +3,16 @@ import express from 'express';
 const server = express();
 server.use(express.json());
 
-const receitas = [
-    {
-        nome: 'aaa',
-        id: 1
-    },
-    {
-        nome: 'bbb',
-        id: 2
-    }
-]
+const tweets = [];
+const users = [];
 
-server.get('/aloha', (req, res) => {
-    res.send(receitas);
+server.post('/sign-up', (req, res) => {
+    users.push(req.body);
+    res.send("OK");
 });
 
-server.get('/', (req, res) => {
-    res.send('Tá acessando o index');
+server.post('/tweets', (req, res) => {
+
 });
 
 server.post('/aloha', (req, res) => {
