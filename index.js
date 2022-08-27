@@ -25,21 +25,22 @@ server.post('/tweets', (req, res) => {
     }; */
 
     tweets.push(tweet);
+    //tweets.unshift(tweet);
     res.send("OK");
 });
 
+server.get('/tweets', (req, res) => {
+    /* let i = tweets.length - 1;
+    let tenTweets = [];
+    while (i > (tweets.length - 10) || tweets[i] !== null) {
+        tenTweets.push(tweets[i]);
+        i--;
+    } */
 
+    const tenTweets = [...tweets].splice(tweets.length - 10).reverse();
+    //const tenTweets = [...tweets].splice(0, 10);
 
-server.post('/aloha', (req, res) => {
-    /* const receita = {
-        nome: 'ccc',    
-        id: 3
-    }
-    receitas.push(receita); */
-    const novaReceita = req.body;
-    novaReceita.id = receitas.length + 1;
-    receitas.push(req.body);
-    res.send(receitas);
-})
+    res.send(tenTweets);
+});
 
 server.listen(5000, () => console.log('Listening on port 5000'));
