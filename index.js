@@ -12,12 +12,27 @@ server.post('/sign-up', (req, res) => {
 });
 
 server.post('/tweets', (req, res) => {
+    const avatar = users.find((value) => req.body.username === value.username).avatar;
+    const tweet = {
+        ...req.body,
+        avatar
+    };
 
+    /* const tweet = {
+        username: req.body.username,
+        tweet: req.body.tweet,
+        avatar: avatar
+    }; */
+
+    tweets.push(tweet);
+    res.send("OK");
 });
+
+
 
 server.post('/aloha', (req, res) => {
     /* const receita = {
-        nome: 'ccc',
+        nome: 'ccc',    
         id: 3
     }
     receitas.push(receita); */
