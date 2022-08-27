@@ -1,7 +1,9 @@
 import express from 'express';
+import cors from 'cors';
 
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 const tweets = [];
 const users = [];
@@ -15,7 +17,7 @@ server.post('/sign-up', (req, res) => {
     }
 });
 
-server.post('/tweets', (req, res) => {
+/* server.post('/tweets', (req, res) => {
     if (!req.body.username || !req.body.tweet) {
         res.status(400).send('Todos os campos são obrigatórios!');
     } else {
@@ -28,18 +30,7 @@ server.post('/tweets', (req, res) => {
         tweets.push(tweet);
         res.status(201).send("OK");
     }
-
-
-    /* const tweet = {
-        username: req.body.username,
-        tweet: req.body.tweet,
-        avatar: avatar
-    }; */
-
-
-    //tweets.unshift(tweet);
-
-});
+}); */
 
 server.get('/tweets', (req, res) => {
     /* let i = tweets.length - 1;
@@ -73,5 +64,20 @@ server.get('/tweets/:username', (req, res) => {
     }
 });
 
+server.post('/tweets', (req, res) => {
+    if (!req.headers.user || !req.body.tweet) {
+        res.status(400).send('Todos os campos são obrigatórios!');
+    } else {
+        const avatar = users.find((value) => req.headers.user === value.username).avatar;
+        const tweet = {
+            username: req.headers.user,
+            tweet: req.body.tweet,
+            avatar: avatar
+        };
+
+        tweets.push(tweet);
+        res.status(201).send("OK");
+    }
+});
 
 server.listen(5000, () => console.log('Listening on port 5000')); 
